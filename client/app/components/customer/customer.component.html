@@ -1,0 +1,20 @@
+ <form class="well" (submit)="addCustomer($event)">
+	<div class="form-group">
+		<input type="text" [(ngModel)]="customerName" name="customerName" class="form-control" placeholder="Add Customer">
+	</div>
+</form>
+
+<div class="task-list">
+	<div *ngFor="let customer of customers">
+		<div class="col-md-1">
+			<input type="checkbox" [checked]="customer.isDone" (click)="updateStatus(customer)">
+		</div>
+		<div class="col-md-7">
+			{{customer.customerName}}
+		</div>
+		<div class="col-md-4">
+			<input type="button" (click)="deleteCustomer(customer._id)" value="Delete" class="btn btn-danger">
+		</div>
+		<br><br>
+	</div>
+</div>
