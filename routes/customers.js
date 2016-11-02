@@ -26,7 +26,7 @@ router.get('/customers/:id', function(req, res, next) {
 //Save customer
 router.post('/customer', function(req, res, next) {
 	var customer = req.body;
-
+	console.log(customer);
 	if(!customer.customerName || !(customer.isDone + '')) {
 		res.status(400);
 		res.json({
@@ -59,7 +59,7 @@ router.put('/customer/:id', function(req, res, next) {
 	var updCustomer = {};
 
 		updCustomer.customerName = customer.customerName;
-		updCustomer.isDone = customer.isDone;
+		updCustomer.locations = customer.locations;
 
 	if(!updCustomer) {
 		res.status(400);

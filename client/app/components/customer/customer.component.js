@@ -14,18 +14,22 @@ var CustomerComponent = (function () {
     function CustomerComponent(customerService) {
         var _this = this;
         this.customerService = customerService;
-        this.customerService.getCustomers().subscribe(function (customers) { _this.customers = customers; });
+        this.showNewCustomerForm = false;
+        this.showLocations = false;
+        this.showCustomers = true;
+        this.newCustBtnTxt = "Ny kunde";
+        this.customerService.getCustomers().subscribe(function (customers) {
+            _this.customers = customers;
+        });
     }
     ;
     CustomerComponent.prototype.addCustomer = function (event) {
         var _this = this;
-        console.log(event);
         event.preventDefault();
         var newCustomer = {
             customerName: this.customerName,
-            isDone: false
+            locations: [{ name: "testlokasjon" }, { name: "testlokasjon2" }]
         };
-        console.log(newCustomer);
         this.customerService.addCustomer(newCustomer).subscribe(function (customer) {
             _this.customers.push(customer);
             _this.customerName = '';
@@ -43,16 +47,49 @@ var CustomerComponent = (function () {
             }
         });
     };
-    CustomerComponent.prototype.updateStatus = function (customer) {
+    CustomerComponent.prototype.updateCustomer = function (customer) {
+        console.log(customer);
         var _customer = {
             _id: customer._id,
             customerName: customer.customerName,
-            isDone: !customer.isDone,
+            locations: customer.locations
         };
-        console.log(_customer);
         this.customerService.updateStatus(_customer).subscribe(function (data) {
-            customer.isDone = !customer.isDone;
         });
+    };
+    CustomerComponent.prototype.toggleNewCustomer = function () {
+        this.showNewCustomerForm = !this.showNewCustomerForm;
+        if (this.showNewCustomerForm) {
+            this.newCustBtnTxt = "Skjul kundeskjema";
+        }
+        else {
+            this.newCustBtnTxt = "Ny kunde";
+        }
+        this.showLocations = false;
+    };
+    CustomerComponent.prototype.showCustomerLocations = function (customer) {
+        this.selectedCustomer = customer;
+        this.showLocations = true;
+        this.showNewCustomerForm = false;
+        this.showCustomers = false;
+    };
+    CustomerComponent.prototype.backToCustomerList = function () {
+        this.showLocations = false;
+        this.showNewCustomerForm = false;
+        this.showCustomers = true;
+    };
+    CustomerComponent.prototype.addLocation = function () {
+        var newLoc = { name: this.locationName };
+        if (this.selectedCustomer.locations == null) {
+            this.selectedCustomer.locations = new Array();
+        }
+        this.selectedCustomer.locations.push(newLoc);
+        this.updateCustomer(this.selectedCustomer);
+        this.locationName = "";
+    };
+    CustomerComponent.prototype.deleteLocation = function (index) {
+        this.selectedCustomer.locations.splice(index, 1);
+        this.updateCustomer(this.selectedCustomer);
     };
     CustomerComponent = __decorate([
         core_1.Component({

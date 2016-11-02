@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', index);
+app.use('/test', index);
 app.use('/api', customers);
 
 app.listen(port, function() {

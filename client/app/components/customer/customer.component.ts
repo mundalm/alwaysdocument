@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import {CustomerService} from '../../services/customer.service'
-import {Customer} from '../../../Customer';
+import {CustomerService} from '../../services/customer.service';
+import {Customer} from '../../../entities/Customer';
+import {Location} from '../../../entities/Location';
+
 
 @Component({
   moduleId: module.id,
@@ -11,19 +13,27 @@ import {Customer} from '../../../Customer';
 export class CustomerComponent { 
 	customers: Customer[];
 	customerName: string;
+	locationName: string;
+	selectedCustomer: Customer;
+	showNewCustomerForm:boolean = false;
+	showLocations:boolean = false;
+	showCustomers:boolean = true;
+	newCustBtnTxt: string = "Ny kunde";
 
 	constructor(private customerService:CustomerService){
-		this.customerService.getCustomers().subscribe(customers => {this.customers = customers});
+		this.customerService.getCustomers().subscribe(customers => {
+			this.customers = customers;
+		});
 	};
 
 	addCustomer(event) {
-		console.log(event); 
 		event.preventDefault();
+
 		var newCustomer = {
 			customerName: this.customerName,
-			isDone: false
+			locations: [{name: "testlokasjon"}, {name: "testlokasjon2"}]
 		}
-		console.log(newCustomer); 
+
 		this.customerService.addCustomer(newCustomer).subscribe(customer => {
 			this.customers.push(customer);
 			this.customerName = ''; 
@@ -44,16 +54,58 @@ export class CustomerComponent {
 		})
 	}
 
-	updateStatus(customer) {
+	updateCustomer(customer) {
+		console.log(customer);
 		var _customer = {
 			_id: customer._id,
 			customerName: customer.customerName,
-			isDone: !customer.isDone,
+			locations: customer.locations
 		};
-		console.log(_customer);
 
 		this.customerService.updateStatus(_customer).subscribe(data => {
-			customer.isDone = !customer.isDone;
+			
 		})
 	}
+
+	toggleNewCustomer() {
+		this.showNewCustomerForm = !this.showNewCustomerForm;
+		if(this.showNewCustomerForm) {
+			this.newCustBtnTxt = "Skjul kundeskjema";
+		} else {
+			this.newCustBtnTxt = "Ny kunde";
+		}
+
+		this.showLocations = false;
+	}
+
+	showCustomerLocations(customer) {
+		this.selectedCustomer = customer;
+		this.showLocations = true;
+		this.showNewCustomerForm = false;
+		this.showCustomers = false;
+	}
+
+	backToCustomerList() {
+		this.showLocations = false;
+		this.showNewCustomerForm = false;
+		this.showCustomers = true;
+	}
+
+	addLocation() {
+		var newLoc:Location = {name: this.locationName};
+
+		if(this.selectedCustomer.locations == null) {
+			this.selectedCustomer.locations = new Array() as Location[];
+		}
+
+		this.selectedCustomer.locations.push(newLoc);
+		this.updateCustomer(this.selectedCustomer);
+		this.locationName = "";
+	}
+
+	deleteLocation(index) {
+		this.selectedCustomer.locations.splice(index, 1);
+		this.updateCustomer(this.selectedCustomer);
+	}
+	
 }

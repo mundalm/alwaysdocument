@@ -1,20 +1,64 @@
- <form class="well" (submit)="addCustomer($event)">
-	<div class="form-group">
-		<input type="text" [(ngModel)]="customerName" name="customerName" class="form-control" placeholder="Add Customer">
-	</div>
-</form>
+ <div *ngIf="!showLocations">
+	 <div class="dropdown">
+	  	<button type="button" (click)="toggleNewCustomer()" class="btn btn-default" name="btnToggleNewCustomer">{{newCustBtnTxt}}</button>
+	 </div>
+</div>
+<div *ngIf="showLocations">
+	 <div class="dropdown">
+	  	<button type="button" (click)="backToCustomerList()" class="btn btn-default" name="btnBackToCustomerList">Tilbake til kundeliste</button>
+	 </div>
+	 <br/>
+	 <h3>Lokasjoner for {{selectedCustomer.customerName}}</h3>
+</div>
+<br />
 
-<div class="task-list">
-	<div *ngFor="let customer of customers">
-		<div class="col-md-1">
-			<input type="checkbox" [checked]="customer.isDone" (click)="updateStatus(customer)">
+<div *ngIf="showNewCustomerForm">
+	<form class="well" (submit)="addCustomer($event)">
+		<div class="form-group">
+			<input type="text" [(ngModel)]="customerName" name="customerName" class="form-control" placeholder="Kundenavn">
 		</div>
-		<div class="col-md-7">
-			{{customer.customerName}}
+	</form>
+</div>
+
+<div *ngIf="showCustomers">
+	<div class="task-list">
+		<div *ngFor="let customer of customers">
+			<!--<div class="col-md-1">
+				<input type="checkbox" [checked]="customer.isDone" (click)="updateStatus(customer)">
+			</div>-->
+			<div class="col-md-7">
+				{{customer.customerName}}
+			</div>
+			<div class="col-md-1">
+				<input type="button" (click)="deleteCustomer(customer._id)" value="Slett" class="btn btn-danger">
+			</div>
+			<div class="col-md-1">
+				<input type="button" (click)="showCustomerLocations(customer)" value="Lokasjoner" class="btn btn-info">
+			</div>
+			<br><br>
 		</div>
-		<div class="col-md-4">
-			<input type="button" (click)="deleteCustomer(customer._id)" value="Delete" class="btn btn-danger">
+	</div>
+</div>
+
+<div *ngIf="showLocations">
+	<form class="well" (submit)="addLocation($event)">
+		<div class="form-group">
+			<input type="text" [(ngModel)]="locationName" name="locationName" class="form-control" placeholder="Navn på ny lokasjon">
 		</div>
-		<br><br>
+	</form>
+
+	<div class="location-list">
+		<div *ngFor="let location of selectedCustomer.locations; let i = index">
+			<!--<div class="col-md-1">
+				<input type="checkbox" [checked]="customer.isDone" (click)="updateStatus(customer)">
+			</div>-->
+			<div class="col-md-7">
+				{{location.name}}
+			</div>
+			<div class="col-md-1">
+				<input type="button" (click)="deleteLocation(i)" value="Slett" class="btn btn-danger">
+			</div>
+			<br><br>
+		</div>
 	</div>
 </div>

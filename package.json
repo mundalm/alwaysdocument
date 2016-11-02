@@ -1,7 +1,7 @@
 {
-  "name": "mytasklist",
+  "name": "alwaysdocument",
   "version": "1.0.0",
-  "description": "Simple task manager",
+  "description": "Site documentation application",
   "main": "server.js",
   "directories": {
     "test": "test"
