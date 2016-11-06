@@ -4,11 +4,12 @@
 	 </div>
 </div>
 <div *ngIf="showLocations">
-	 <div class="dropdown">
+	<div class="col-md-5">
+	  	<button type="button" (click)="toggleNewLocation()" class="btn btn-default" name="btnBackToCustomerList">{{newLocBtnTxt}}</button>
 	  	<button type="button" (click)="backToCustomerList()" class="btn btn-default" name="btnBackToCustomerList">Tilbake til kundeliste</button>
 	 </div>
-	 <br/>
-	 <h3>Lokasjoner for {{selectedCustomer.customerName}}</h3>
+	 <br/><br/>
+	 <h4>Lokasjoner for {{selectedCustomer.customerName}}</h4><hr/>
 </div>
 <br />
 
@@ -41,17 +42,22 @@
 </div>
 
 <div *ngIf="showLocations">
-	<form class="well" (submit)="addLocation($event)">
-		<div class="form-group">
-			<input type="text" [(ngModel)]="locationName" name="locationName" class="form-control" placeholder="Navn på ny lokasjon">
-		</div>
-	</form>
+	<div [hidden]="!showNewLocationForm"  >
+		<form class="well" (submit)="addLocation($event)">
+			<div class="form-group">
+				<label name="lblLoationName">Navn på lokasjon</label>
+				<input type="text" [(ngModel)]="locationName" name="locationName" class="form-control" placeholder="Navn">
+			</div>
+			<div class="form-group">
+				<label name="lblLocationTFM">Tverrfaglig merking</label>
+				<input type="text" [(ngModel)]="locationTFM" name="locationTFM" class="form-control" placeholder="TFM">
+			</div>
+			<button class="form-control" name="btnAddLocation" (submit)="addLocation($event)">Legg til</button>
+		</form>
+	</div>
 
 	<div class="location-list">
 		<div *ngFor="let location of selectedCustomer.locations; let i = index">
-			<!--<div class="col-md-1">
-				<input type="checkbox" [checked]="customer.isDone" (click)="updateStatus(customer)">
-			</div>-->
 			<div class="col-md-7">
 				{{location.name}}
 			</div>

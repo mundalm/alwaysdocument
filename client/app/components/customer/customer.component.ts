@@ -16,9 +16,11 @@ export class CustomerComponent {
 	locationName: string;
 	selectedCustomer: Customer;
 	showNewCustomerForm:boolean = false;
+	showNewLocationForm:boolean = false;
 	showLocations:boolean = false;
 	showCustomers:boolean = true;
 	newCustBtnTxt: string = "Ny kunde";
+	newLocBtnTxt: string = "Ny lokasjon";
 
 	constructor(private customerService:CustomerService){
 		this.customerService.getCustomers().subscribe(customers => {
@@ -76,6 +78,17 @@ export class CustomerComponent {
 		}
 
 		this.showLocations = false;
+	}
+
+	toggleNewLocation() {
+		this.showNewLocationForm = !this.showNewLocationForm;
+
+		if(this.showNewLocationForm) {
+			this.newLocBtnTxt = "Skjul lokasjonsskjema";
+		} else {
+			this.newLocBtnTxt = "Ny lokasjon";
+		}
+
 	}
 
 	showCustomerLocations(customer) {

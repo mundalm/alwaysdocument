@@ -15,9 +15,11 @@ var CustomerComponent = (function () {
         var _this = this;
         this.customerService = customerService;
         this.showNewCustomerForm = false;
+        this.showNewLocationForm = false;
         this.showLocations = false;
         this.showCustomers = true;
         this.newCustBtnTxt = "Ny kunde";
+        this.newLocBtnTxt = "Ny lokasjon";
         this.customerService.getCustomers().subscribe(function (customers) {
             _this.customers = customers;
         });
@@ -66,6 +68,15 @@ var CustomerComponent = (function () {
             this.newCustBtnTxt = "Ny kunde";
         }
         this.showLocations = false;
+    };
+    CustomerComponent.prototype.toggleNewLocation = function () {
+        this.showNewLocationForm = !this.showNewLocationForm;
+        if (this.showNewLocationForm) {
+            this.newLocBtnTxt = "Skjul lokasjonsskjema";
+        }
+        else {
+            this.newLocBtnTxt = "Ny lokasjon";
+        }
     };
     CustomerComponent.prototype.showCustomerLocations = function (customer) {
         this.selectedCustomer = customer;
